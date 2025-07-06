@@ -2,15 +2,15 @@
   <div class="container-fluid mt-3">
     <div class="card">
       <header class="card-header">
-        <h2>Componente Principal (App)</h2>
+        <h2>Riot ML</h2>
       </header>
 
       <main class="card-body">
-        <Navbar />
+        <!-- <Navbar /> -->
         <RouterView />
 
         <!-- <ChampionsSelection :champ_selection_blocks="getChampSelectionBlock()"/> -->
-        <ChampionsSelection />
+        <!-- <ChampionsSelection /> -->
         
         
         <!-- <Binding />
@@ -25,14 +25,14 @@
 
 <script>
 /* componentes de simple archivo (template, script y style) */
-import Navbar from './components/Navbar.vue'
+//import Navbar from './components/Navbar.vue'
 import ChampionsSelection from './components/ChampionsSelection.vue'
 //import { useGlobalStore } from '@/stores/global'
 
 export default {
   name: 'app',
   components: {
-    Navbar,
+    //Navbar,
     ChampionsSelection
   },
   //data: {//useGlobalStore: useGlobalStore()},

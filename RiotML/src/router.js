@@ -6,11 +6,11 @@ import ItemsBuilder from "./components/ItemsBuilder.vue";
 const routes = [
     /* ---- definición de la ruta raíz ---- */
     //{ path: '/', component: Binding },
-    //{ path: '/', redirect: '/champsSelection' },
+    { path: '/', redirect: '/champsSelection' },
 
     /* ---- definición de las rutas activas ---- */
-    { path: '/champsSelection', component: ChampionsSelection, props: true   },
-    { path: '/itemsSelection', component: ItemsBuilder, props: true  },
+    { path: '/champsSelection', component: ChampionsSelection},
+    { path: '/itemsSelection', component: ItemsBuilder},
 
 
     /* ---- definición de las rutas no existentes (por default) ---- */

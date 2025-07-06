@@ -4,21 +4,35 @@
       <h3>SelectionSlot</h3>
     </div>
 
-<div>
-    <div class="card-body">
-          <div class="card-body">
-      <Team :color="blue" :client="client" />
-          </div>
-          </div>
+      <div class="grid-container">
+  <div class="grid-container">
+  <div class="selection-container">
+    <select v-model="selectedChamp">
+      <!-- <option disabled value="">Please select one</option> -->
+      <option v-for="(option, index) in getNames()" :key="index" :value="option">
+      <!-- <option v-for="(option, index) in getNames()" :key="index" :value="getImgUrl(option)">   -->
+        {{ option}}
+      </option>
+    </select>
+  </div>
+
+  <div class="image-container" v-if="selectedChamp">
+    <img :src="getImgUrl(selectedChamp)" :alt="'Selected Image'">
+  </div>
 </div>
 
 <div>
+  <button @click="confirmado()">Confirmar seleccion</button>
+</div>
+</div>
+
+<!-- <div>
     <div class="card-body">
           <div class="card-body">
       <Team :color="red" :client="client" />
           </div>
           </div>
-</div>
+</div> -->
   </section>
 </template>
 
@@ -31,22 +45,37 @@ export default {
 
   //Tengo que usar este componente para interactuar con mi backend, mostrar imagenes, etc.
   name: 'selection-slot',
-  props: ["type", "client", "visible"],
+  props: ["type", "client", "blockindex"],
   data() {
     return {
       globalStore: useGlobalStore(),
-      service: new ServicioChampions()
+      service: new ServicioChampions(),
+      selectedChamp: this.selectedChamp,
+      names: this.names
     }
+  },
+  async beforeMount() {
+    this.names = await this.service.getAllNames()
   },
   methods: {
     confirmado() {
-      if (client) {
-      this.globalStore.incrementarCompletedSlotsClient(1)  
+      if (this.client) {
+      this.globalStore.incrementarCompletedSlotsClient(1, this.blockindex, this.client, this.type)  
       } else {
-        this.globalStore.incrementarCompletedSlotsOpp(1)
+        this.globalStore.incrementarCompletedSlotsOpp(1, this.blockindex, this.client, this.type)
       }
-      
+      //const new_names = this.names.splice(this.names.indexOf(this.selectedChamp))
+      //Esto tiene que sacar el name de todos los componentes, los names quiza tienen que estar en el estado global
+      //this.names = new_names
     },
+    getNames() {
+      //const names = await this.service.getAllNames()
+      return this.names
+    },
+   getImgUrl(champ) {
+      //const img = await this.service.getImg(champ)
+      return this.service.getImg(champ)
+    }
   },
   computed: {
 
