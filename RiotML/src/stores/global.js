@@ -14,7 +14,7 @@ export const useGlobalStore = defineStore('global', {
                 // [{"client": true, "opp": true}, {"client": true, "opp": true}]],
                 completionCriteria: {"client": 10, "opp": 10},
                 service: new ServicioChampions(),
-                names: {}
+                names: []
                 //names: await getAllNames()
    }),
   getters: {
@@ -58,11 +58,19 @@ export const useGlobalStore = defineStore('global', {
     //   return selectionIdxVisibilityChange.includes(index)
     // },
     removeName(name) {
-      const new_names = this.names.splice(this.names.indexOf(name))
+      console.log("remove name en store")
+      console.log(typeof this.names)
+      console.log(this.names.indexOf(name))
+      this.names.splice(this.names.indexOf(name), 1)
+      
+      //console.log(new_names.includes(name))
       //Esto tiene que sacar el name de todos los componentes, los names quiza tienen que estar en el estado global
-      this.names = new_names
+      //this.names = new_names
+      
     },
     setNames(names) {
+      console.log("setNames en store llamado")
+      console.log(names)
       this.names = names
     },
     

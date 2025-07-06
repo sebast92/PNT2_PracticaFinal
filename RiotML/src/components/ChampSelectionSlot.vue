@@ -50,27 +50,27 @@ export default {
     return {
       globalStore: useGlobalStore(),
       service: new ServicioChampions(),
-      selectedChamp: this.selectedChamp,
-      names: this.names
+      selectedChamp: this.selectedChamp
     }
   },
-  async beforeMount() {
-    this.names = await this.service.getAllNames()
-  },
+
   methods: {
     confirmado() {
+      console.log("Remove name en confirmado")
+      console.log(this.selectedChamp)
       if (this.client) {
       this.globalStore.incrementarCompletedSlotsClient(1, this.blockindex, this.client, this.type)  
       } else {
         this.globalStore.incrementarCompletedSlotsOpp(1, this.blockindex, this.client, this.type)
       }
+      this.globalStore.removeName(this.selectedChamp)
       //const new_names = this.names.splice(this.names.indexOf(this.selectedChamp))
       //Esto tiene que sacar el name de todos los componentes, los names quiza tienen que estar en el estado global
       //this.names = new_names
     },
     getNames() {
       //const names = await this.service.getAllNames()
-      return this.names
+      return this.globalStore.getNames
     },
    getImgUrl(champ) {
       //const img = await this.service.getImg(champ)

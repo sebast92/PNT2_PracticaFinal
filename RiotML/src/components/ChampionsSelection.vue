@@ -20,9 +20,9 @@
   <TeamBuilder color="red" :client="client=='red'" :selections="getSelectionBlocks()" :hidden="!colorFueEscogido()"/>
 </div>
 
-<!-- <div>
+<div>
   <TeamBuilder color="blue" :client="client=='blue'" :selections="getSelectionBlocks()" :hidden="!colorFueEscogido()"/>
-</div> -->
+</div>
 </div>
 
 <div><div v-if="useGlobalStore.getCompletion">
@@ -38,6 +38,7 @@
 //Este componente puede tener un boton para pedir la recomendacion, eso es llamar a nuevosChamps y generar el win_rate por ahora aca por practicidad
 import { useGlobalStore } from '@/stores/global'
 import TeamBuilder from './TeamBuilder.vue'
+import getAllNames from '@/services/championNames'
 
 export default {
   name: 'champion-selection',
@@ -45,6 +46,12 @@ export default {
   //selection-blocks podria ser un array de objetos del tipo {"ban": n1, "pick": n2}, asi podria flexibilizar la representacion
   //props: ["champ-selection-blocks"],
   props: [],
+    async mounted() {
+      let names = await getAllNames()
+      console.log("afterMount mounted")
+      console.log(names.length)
+      this.useGlobalStore.setNames(names)
+    },
   data() {
     return {
       color: false,
@@ -53,6 +60,7 @@ export default {
     }
   },
   methods: {
+
     getItemsRoute() {
       //return this.useGlobalStore.getItemsSlots()
       return `/itemsSelection/${this.useGlobalStore.getItemsSlots}`

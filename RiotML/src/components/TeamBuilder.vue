@@ -43,6 +43,7 @@ export default {
   name: 'teamBuilder',
   props: ["color", "client", "selections"],
   components: {ChampSelectionBlock},
+
   data() {
     return {
       useGlobalStore: useGlobalStore(),
@@ -50,6 +51,7 @@ export default {
     }
   },
   methods: {
+
     // Si index es 0 mostrar siempre, si es 1 hay que mostrar solo si se completo el anterior bloque
     // isHiddenBlock(index) {
     //   if(index === 0) {
