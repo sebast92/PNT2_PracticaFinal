@@ -21,31 +21,32 @@ export const useGlobalStore = defineStore('global', {
     getCompletedSlotsClient: state => state.completedSlots.client,
       //client? state.completedSlots.client: state.completedSlots.opp,
     getCompletedSlotsOpp: state => state.completedSlots.opp,
+    getCompletedSlots: state => state.completedSlots,
     getItemsSlots: state => state.itemsSlots,
     getChampSelectionBlock: state => state.champSelectionBlock,
-    getCompletion: state => state.completedSlots == state.completionCriteria,
+    //getCompletion: state => state.completedSlots == state.completionCriteria,
+    getCompletion: state => JSON.stringify(state.completedSlots) === JSON.stringify(state.completionCriteria),
     getNames: state => state.names,
     getHiddenCounters: state => state.hiddenCounters,
+    getCompletionCriteria: state => state.completionCriteria
   },
   actions: {
     incrementarCompletedSlotsClient(paso, blockindex, client, type) {
       this.completedSlots.client += paso
-
+      console.log("incrementarCompletedSlotsClient")
+      console.log(this.completedSlots.client)
       let processedClient
       if (client) {
           processedClient = "client"
       } else {
         processedClient = "opp"
       }
-      console.log("incrementarCompletedSlotsClient")
-      console.log(blockindex, processedClient, type) 
       this.hiddenCounters[blockindex][processedClient][type] += paso
-      console.log("Result")
-      console.log(this.hiddenCounters)
     },
       incrementarCompletedSlotsOpp(paso, blockindex, client, type) {
       this.completedSlots.opp += paso
-
+      console.log("incrementarCompletedSlotsOpp")
+      console.log(this.completedSlots.opp)
       let processedClient
       if (client) {
           processedClient = "client"

@@ -31,7 +31,7 @@
   <button @click="setBlockCompleted()">Confirmar bloque de seleccion</button>
 </div>
         
-
+{{ useGlobalStore.getCompletionCriteria }}, {{ useGlobalStore.getCompletedSlots }} , {{ useGlobalStore.getCompletionCriteria == useGlobalStore.getCompletedSlots }}
   </section>
 </template>
 

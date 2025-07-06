@@ -25,9 +25,13 @@
 </div>
 </div>
 
-<div><div v-if="useGlobalStore.getCompletion">
+<div>
+  <div v-if="useGlobalStore.getCompletion">
   <RouterLink class="nav-link" :to=getItemsRoute()>Select items and see their impact on win rates</RouterLink>
   </div>
+  <div>
+  useGlobalStore.getCompletion: {{ useGlobalStore.getCompletion }}</div>
+  <div> {{ useGlobalStore.getCompletedSlotsOpp }}, {{ useGlobalStore.getCompletedSlotsClient }}</div>
 </div>
 
   </section>
