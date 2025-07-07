@@ -1,42 +1,46 @@
 import axios from "axios"
 
-
-const CHAMPS_URL = 'https://ddragon.leagueoflegends.com/cdn/15.13.1/data/en_US/champion.json'
-const data = await ServicioItems.getAll(CHAMPS_URL)
-
 class ServicioItems {
-    #service
     #imgBaseUrl
-    ids
+    #itemsUrl
+    //names
 
     constructor() {
+        //console.log(names)
         //Recordar que la URL depende de un versionado que habria que monitorear
-        this.#imgBaseUrl = "https://ddragon.leagueoflegends.com/cdn/15.13.1/img/item/"
-        this.#service = "a"
-        //this.#data = 
-        this.ids = this.processIds(data)
+        this.#imgBaseUrl = "https://ddragon.leagueoflegends.com/cdn/15.13.1/img"
+        this.#itemsUrl = "https://ddragon.leagueoflegends.com/cdn/15.13.1/data/en_US/item.json"
+        //this.names = names
 
     }
 
-    processIds = data => {
-        return Object.keys(data)
+    getItemImg = item => {
+       // const img = await axios.get(`${this.#imgBaseUrl}/${champ}.png`) 
+        return `${this.#imgBaseUrl}/item/${item}.png`
     }
 
-    getImg = async item => {
-        return this.#imgBaseUrl + item + ".png"
-
-    }
-
-    static getAll = async url => {
+    getAllIdsAndNames = async () => {
         try {
-            const { data } = await axios.get(url)
-            console.log(Object.keys(data))
-            return data
+            const { data } = await axios.get(this.#itemsUrl)
+            let names = []
+            let ids = []
+            for (let key in data["data"]) {
+                ids.push(key)
+                names.push(data["data"][key]["name"])
+            }
+            //console.log(Object.keys(data))
+            //console.log(data["data"]["Aatrox"])
+            //console.log(names)
+            let return_value = []
+            return_value.push(ids)
+            return_value.push(names)
+            return return_value
         }
         catch(error) {
-            console.error("Error items GET", error)
+            console.error("Error champions GET", error)
         }
     }
 }
+
 
 export default ServicioItems

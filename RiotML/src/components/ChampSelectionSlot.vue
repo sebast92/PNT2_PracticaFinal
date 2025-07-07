@@ -17,7 +17,7 @@
   </div>
 
   <div class="image-container" v-if="selectedChamp">
-    <img :src="getImgUrl(selectedChamp)" :alt="'Selected Image'">
+    <img :src="getChampImg(selectedChamp)" :alt="'Selected Image'">
   </div>
 </div>
 
@@ -59,10 +59,11 @@ export default {
       console.log("Remove name en confirmado")
       console.log(this.selectedChamp)
       if (this.client) {
-      this.globalStore.incrementarCompletedSlotsClient(1, this.blockindex, this.client, this.type)  
+      this.globalStore.incrementarCompletedSlotsClient(1, this.blockindex, this.client, this.type, this.selectedChamp)  
       } else {
-        this.globalStore.incrementarCompletedSlotsOpp(1, this.blockindex, this.client, this.type)
+        this.globalStore.incrementarCompletedSlotsOpp(1, this.blockindex, this.client, this.type, this.selectedChamp)
       }
+      
       this.globalStore.removeName(this.selectedChamp)
       //const new_names = this.names.splice(this.names.indexOf(this.selectedChamp))
       //Esto tiene que sacar el name de todos los componentes, los names quiza tienen que estar en el estado global
@@ -72,9 +73,9 @@ export default {
       //const names = await this.service.getAllNames()
       return this.globalStore.getNames
     },
-   getImgUrl(champ) {
+   getChampImg(champ) {
       //const img = await this.service.getImg(champ)
-      return this.service.getImg(champ)
+      return this.service.getChampImg(champ)
     }
   },
   computed: {

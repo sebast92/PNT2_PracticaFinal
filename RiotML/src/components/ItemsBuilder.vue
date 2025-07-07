@@ -2,55 +2,100 @@
   <section class="card">
     <div class="card-header">
       <h3>Item Builder</h3>
-      <h4> {{ color }}</h4>
-      <h4> {{ client }}</h4>
     </div>
 
-<div v-for="(block, index) in selection_blocks" :key="index">
-  <div v-for="(key, value) in Object.entries(block)" :key="key">
-      <div v-for="(_, idx) in [...Array(value).keys()]", :key="idx">
-        <!-- Pensar como gestionar que se vayan mostrando a medida que se seleccionan -->
-        <SelectionSlot :type="key" :client="client" :visible="getVisibility(idx)"/>
-      </div>
+  <div class="grid-container">
+  <div class="grid-container">
+  <div class="selection-container">
+    <select v-model="selectedChamp">
+      <!-- <option disabled value="">Please select one</option> -->
+      <option v-for="(option, index) in getNames()" :key="index" :value="option">
+      <!-- <option v-for="(option, index) in getNames()" :key="index" :value="getImgUrl(option)">   -->
+        {{ option}}
+      </option>
+    </select>
   </div>
 </div>
 
+  <div class="image-container" v-if="selectedChamp">
+    <img :src="getChampImg(selectedChamp)" :alt="'Selected Image'">
+  </div>
+</div>
+
+<!-- Necesitaria que al confirmar build o cambiar de champ se me reseteen los ItemSelectionSlot -->
+<div v-if="selectedChamp">
+<div v-for="(_, idx) in [...Array(useGlobalStore.getItemsSlots).keys()]" :key="idx">
+    <ItemSelectionSlot />
+</div>
+</div>
+
+
 <div>
-    <div class="card-body">
-          <div class="card-body">
-      <Team :color="red" :client="client" />
-          </div>
-          </div>
-          </div>
+    <button class="btn btn-info my-3" @click="confirmarBuild()">Confirmar Build</button>
+    <!-- <RouterLink class="nav-link" :to=getItemsRoute()>Select items and see their impact on win rates</RouterLink> -->
+</div>
+
+
+
+
+
+
+
+
+<!-- 
+<div v-for="(block, index) in selection_blocks" :key="index">
+  <div v-for="(key, value) in Object.entries(block)" :key="key">
+      <div v-for="(_, idx) in [...Array(value).keys()]", :key="idx">
+        Pensar como gestionar que se vayan mostrando a medida que se seleccionan 
+        <SelectionSlot :type="key" :client="client" :visible="getVisibility(idx)"/>
+      </div>
+  </div>
+
+-->
 
   </section>
 </template>
 
 <script>
 import { useGlobalStore } from '@/stores/global'
-import SelectionSlot from './ChampSelectionSlot.vue'
+import ItemSelectionSlot from './ItemSelectionSlot.vue'
+import ServicioBuilds from '@/services/builds'
+import ServicioChampions from '@/services/champions'
 export default {
   name: 'itemBuilder',
-  props: ["champ", "team", "selection-slots"],
+  //props: ["champ", "team"],
+  props: [],
+  components: {ItemSelectionSlot},
   data() {
     return {
-      useGlobalStore: useGlobalStore()
+      useGlobalStore: useGlobalStore(),
+      //teams: this.useGlobalStore.getTeams,
+      selectedChamp: this.selectedChamp,
+      buildService: new ServicioBuilds(),
+      champService: new ServicioChampions()
     }
   },
   methods: {
+      async confirmarBuild() {
+      let build = this.useGlobalStore.getBuild
+      let pushElement = {"champ": this.selectedChamp, "items": build}
+      await this.buildService.post(pushElement)
+      //this.$router.push(this.getItemsRoute())
+      //Aca deberia llamar al servicio para hacer un axios.post y routear a ItemBuilder
+    },
     //Esto usa el estado global
     getVisibility(idx) {
       return this.useGlobalStore.getCompletedSlots === idx
     },
-    getContador() {
-      return this.contador3
+    getNames() {
+      let teams = this.useGlobalStore.getTeams
+      return teams["blue"].concat(teams["red"])
+
+    },    
+    getChampImg(champ) {
+      //const img = await this.service.getImg(champ)
+      return this.champService.getChampImg(champ)
     },
-    actualizar(e) {
-      //console.log('actualizar', e)
-      const dato = e.target.value
-      console.log(dato)
-      this.valor2 = dato
-    }
   },
   computed: {
 
