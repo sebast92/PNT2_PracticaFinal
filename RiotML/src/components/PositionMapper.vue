@@ -27,6 +27,17 @@
       </option>
     </select>
 
+    <div v-if="showRecommendation()">
+        <button @click="getRecommendation()"> Recomendar </button>
+
+  <div class="grid-container" v-if="recommendedRole">
+    {{ recommendedRole }}
+    <!-- <img :src="getChampImg(recommendedChamp)" :alt="'Selected Image'"> -->
+    win_rate = {{ Math.random() }}
+  </div>
+</div>
+
+
     <div>
   <button @click="confirmado()">Confirmar seleccion</button>
 </div>
@@ -68,12 +79,19 @@ export default {
       client: false,
       selectedRole: this.selectedRole,
       selectedChamp: this.selectedChamp,
+      recommendedRole: this.recommendedRole,
       useGlobalStore: useGlobalStore(),
       serviceTeams: new ServicioTeams(),
       serviceChamps: new ServicioChampions()
     }
   },
   methods: {
+    showRecommendation() {
+        let teams = this.useGlobalStore.getTeams
+        let color = this.useGlobalStore.getColors["client"]
+
+        return teams[color].includes(this.selectedChamp)
+    },
     getNames() {
       let teams = this.useGlobalStore.getTeams
         console.log("PositionMapper.getNames")
@@ -125,6 +143,12 @@ export default {
     colorFueEscogido() {
       return Boolean(this.color)
     },
+     getRecommendation() {
+    const roles = this.useGlobalStore.getRoles
+    console.log("PositionMapper")
+    console.log(roles)
+      this.recommendedRole = roles[Math.floor(Math.random() * roles.length)]
+    }
   },
   computed: {
 

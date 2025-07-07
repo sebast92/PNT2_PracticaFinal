@@ -17,12 +17,14 @@ export const useGlobalStore = defineStore('global', {
                 service: new ServicioChampions(),
                 teams: {"blue": [], "red": []},
                 positionedTeams: {"blue": {}, "red": {}},
+                roles: ["top", "jungle", "mid", "bot", "support"],
                 names: [],
                 items: {},
                 build: []
                 //names: await getAllNames()
    }),
   getters: {
+    getRoles: state => state.roles,
     getCompletedSlotsClient: state => state.completedSlots.client,
       //client? state.completedSlots.client: state.completedSlots.opp,
     getCompletedSlotsOpp: state => state.completedSlots.opp,
@@ -37,7 +39,8 @@ export const useGlobalStore = defineStore('global', {
     getPositionedTeams: state => state.positionedTeams,
     getTeams: state => state.teams,
     getItems: state => state.items,
-    getBuild: state => state.build
+    getBuild: state => state.build,
+    getColors: state => state.colors
   },
   actions: {
     incrementarCompletedSlotsClient(paso, blockindex, client, type, selectedChamp) {
@@ -110,5 +113,8 @@ export const useGlobalStore = defineStore('global', {
       this.positionedTeams[color][position] = champ
       console.log(this.positionedTeams)
     },
+    resetBuild() {
+      this.build = []
+    }
   },
 })

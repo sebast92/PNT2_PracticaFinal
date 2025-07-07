@@ -27,6 +27,16 @@
   <button @click="confirmado()">Confirmar seleccion</button>
 </div>
 
+<div v-if="client">
+<button @click="getRecommendation()"> Recomendar </button>
+
+  <div class="image-container" v-if="recommendedItem">
+    <img :src="getItemImgCode(recommendedItem)" :alt="'Selected Image'">
+    win_rate = {{ Math.random() }}
+    {{ getItemImgCode(recommendedItem) }}
+  </div>
+</div>
+
 </div>
 
   </section>
@@ -43,12 +53,13 @@ export default {
 
   //Tengo que usar este componente para interactuar con mi backend, mostrar imagenes, etc.
   name: 'selection-slot',
-  props: [],
+  props: ["client"],
 //    props: ["type", "client", "visible"],
   data() {
     return {
       globalStore: useGlobalStore(),
       selectedItem: this.selectedItem,
+      recommendedItem: this.recommendedItem,
       serviceItems: new ServicioItems(),
       serviceChamps: new ServicioChampions()
     }
@@ -74,15 +85,22 @@ export default {
       //const img = await this.service.getImg(champ)
       return this.serviceItems.getItemImg(key)
     },
+    getItemImgCode(key) {
+      //let items = this.globalStore.getItems
+      //const key = Object.keys(items).find((key) => items[key] === item);
+      //const img = await this.service.getImg(champ)
+      return this.serviceItems.getItemImg(key)
+    },
     getChampImg(champ) {
       //const img = await this.service.getImg(champ)
       return this.serviceChamps.getChampImg(champ)
     },
-    actualizar(e) {
+    async getRecommendation() {
       //console.log('actualizar', e)
-      const dato = e.target.value
-      console.log(dato)
-      this.valor2 = dato
+      let item = await this.serviceItems.getItem()  
+      console.log("ItemSelectionSlot")
+      console.log(item)
+      this.recommendedItem = item
     }
   },
   computed: {

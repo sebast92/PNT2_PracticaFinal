@@ -3,7 +3,7 @@ import axios from "axios"
 class ServicioItems {
     #imgBaseUrl
     #itemsUrl
-    //names
+    #service
 
     constructor() {
         //console.log(names)
@@ -11,7 +11,7 @@ class ServicioItems {
         this.#imgBaseUrl = "https://ddragon.leagueoflegends.com/cdn/15.13.1/img"
         this.#itemsUrl = "https://ddragon.leagueoflegends.com/cdn/15.13.1/data/en_US/item.json"
         //this.names = names
-
+        this.#service = "http://localhost:8080/api/items"
     }
 
     getItemImg = item => {
@@ -39,6 +39,19 @@ class ServicioItems {
         catch(error) {
             console.error("Error champions GET", error)
         }
+    }
+
+    getItem = async () => {
+        let idsNames = await this.getAllIdsAndNames()
+        let ids = idsNames[0]
+        console.log("ServicioItems")
+        console.log(idsNames)
+        console.log(ids)
+        let idx = Math.floor(Math.random() * ids.length)
+        console.log(idx)
+        let random_id = ids[idx]
+        console.log(random_id)
+        return random_id
     }
 }
 

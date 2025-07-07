@@ -19,7 +19,19 @@
   <div class="image-container" v-if="selectedChamp">
     <img :src="getChampImg(selectedChamp)" :alt="'Selected Image'">
   </div>
+<div>
+
+  <div v-if="client">
+<button @click="getRecommendation()"> Recomendar </button>
+
+  <div class="image-container" v-if="recommendedChamp">
+    <img :src="getChampImg(recommendedChamp)" :alt="'Selected Image'">
+    win_rate = {{ Math.random() }}
+  </div>
 </div>
+</div>
+</div>
+
 
 <div>
   <button @click="confirmado()">Confirmar seleccion</button>
@@ -50,7 +62,8 @@ export default {
     return {
       globalStore: useGlobalStore(),
       service: new ServicioChampions(),
-      selectedChamp: this.selectedChamp
+      selectedChamp: this.selectedChamp,
+      recommendedChamp: this.recommendedChamp
     }
   },
 
@@ -63,7 +76,7 @@ export default {
       } else {
         this.globalStore.incrementarCompletedSlotsOpp(1, this.blockindex, this.client, this.type, this.selectedChamp)
       }
-      
+
       this.globalStore.removeName(this.selectedChamp)
       //const new_names = this.names.splice(this.names.indexOf(this.selectedChamp))
       //Esto tiene que sacar el name de todos los componentes, los names quiza tienen que estar en el estado global
@@ -76,6 +89,13 @@ export default {
    getChampImg(champ) {
       //const img = await this.service.getImg(champ)
       return this.service.getChampImg(champ)
+    },
+    async getRecommendation() {
+      let champ = await this.service.getRecommendation() 
+      console.log("ChampSelSlot.getRecommendation")
+      console.log(champ["data"])
+      //return champ
+      this.recommendedChamp = champ["data"][0]["name"]
     }
   },
   computed: {

@@ -40,6 +40,7 @@
   <div v-if="useGlobalStore.getCompletion">
     <button class="btn btn-info my-3" @click="confirmarTeams()">Ir a Items</button>
     <!-- <RouterLink class="nav-link" :to=getItemsRoute()>Select items and see their impact on win rates</RouterLink> -->
+     <div v-if="confirmedTeams"> {{ confirmedTeams.win_rate }}</div>
   </div>
 </div>
 
@@ -76,7 +77,8 @@ export default {
       color: false,
       client: false,
       useGlobalStore: useGlobalStore(),
-      service: new ServicioTeams()
+      service: new ServicioTeams(),
+      confirmedTeams: this.confirmedTeams
     }
   },
   methods: {
@@ -85,8 +87,11 @@ export default {
     },
 
     async confirmarTeams() {
-      let teams = await this.service.post(this.useGlobalStore.getPositionedTeams)
-      console.log(teams) 
+      this.confirmedTeams = await this.service.post(this.useGlobalStore.getPositionedTeams)
+      console.log("ChampionSelection.confirmarTeams")
+      console.log(this.confirmedTeams)
+      //console.log(teams) 
+      //confirmedTeams
       this.$router.push(this.getItemsRoute())
       //Aca deberia llamar al servicio para hacer un axios.post y routear a ItemBuilder
     },

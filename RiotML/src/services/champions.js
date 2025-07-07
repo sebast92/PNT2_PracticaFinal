@@ -11,7 +11,7 @@ class ServicioChampions {
         //Recordar que la URL depende de un versionado que habria que monitorear
         this.#imgBaseUrl = "https://ddragon.leagueoflegends.com/cdn/15.13.1/img"
         this.#champsUrl = 'https://ddragon.leagueoflegends.com/cdn/15.13.1/data/en_US/champion.json'
-        this.#serviceUrl = "localhost 8080"
+        this.#serviceUrl = "http://localhost:8080/api/champions/1"
         //this.names = names
 
     }
@@ -19,6 +19,10 @@ class ServicioChampions {
     getChampImg = champ => {
        // const img = await axios.get(`${this.#imgBaseUrl}/${champ}.png`) 
         return `${this.#imgBaseUrl}/champion/${champ}.png`
+    }
+
+    getRecommendation = async () => {
+        return await axios.get(this.#serviceUrl)
     }
 
     getAllNames = async () => {

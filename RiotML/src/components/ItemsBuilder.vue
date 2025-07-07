@@ -25,20 +25,28 @@
 <!-- Necesitaria que al confirmar build o cambiar de champ se me reseteen los ItemSelectionSlot -->
 <div v-if="selectedChamp">
 <div v-for="(_, idx) in [...Array(useGlobalStore.getItemsSlots).keys()]" :key="idx">
-    <ItemSelectionSlot />
+    <ItemSelectionSlot :client="showRecommendation()"/>
 </div>
 </div>
 
 
 <div>
     <button class="btn btn-info my-3" @click="confirmarBuild()">Confirmar Build</button>
+    <div v-if="finalBuild"> {{ finalBuild.win_rate }} </div>
     <!-- <RouterLink class="nav-link" :to=getItemsRoute()>Select items and see their impact on win rates</RouterLink> -->
 </div>
 
 
+<!-- <div v-if="showRecommendation()">
 
+<button @click="getRecommendation()"> Recomendar </button>
 
+  <div class="image-container" v-if="recommendedItem">
+    <img :src="getItemImg(recommendedItem)" :alt="'Selected Image'">
+    win_rate = {{ Math.random() }}
+  </div>
 
+</div> -->
 
 
 
@@ -61,6 +69,8 @@ import { useGlobalStore } from '@/stores/global'
 import ItemSelectionSlot from './ItemSelectionSlot.vue'
 import ServicioBuilds from '@/services/builds'
 import ServicioChampions from '@/services/champions'
+import ServicioItems from '@/services/items'
+
 export default {
   name: 'itemBuilder',
   //props: ["champ", "team"],
@@ -72,14 +82,28 @@ export default {
       //teams: this.useGlobalStore.getTeams,
       selectedChamp: this.selectedChamp,
       buildService: new ServicioBuilds(),
-      champService: new ServicioChampions()
+      champService: new ServicioChampions(),
+      itemService: new ServicioItems(),
+      finalBuild: this.finalBuild
     }
   },
   methods: {
+      showRecommendation() {
+        let teams = this.useGlobalStore.getTeams
+        let color = this.useGlobalStore.getColors["client"]
+        console.log("ItemsBuilder.showRecommendation")
+        console.log(teams[color].includes(this.selectedChamp))
+        return teams[color].includes(this.selectedChamp)
+    },
+      async getRecommendation() {
+      //console.log('actualizar', e)
+        this.recommendedItem = await this.serviceItems.getItem()  
+    }, 
       async confirmarBuild() {
       let build = this.useGlobalStore.getBuild
       let pushElement = {"champ": this.selectedChamp, "items": build}
-      await this.buildService.post(pushElement)
+      this.finalBuild = await this.buildService.post(pushElement)
+      this.useGlobalStore.resetBuild()
       //this.$router.push(this.getItemsRoute())
       //Aca deberia llamar al servicio para hacer un axios.post y routear a ItemBuilder
     },
